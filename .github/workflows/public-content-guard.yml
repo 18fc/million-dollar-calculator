@@ -1,0 +1,103 @@
+name: Public content guard
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  scan-public-content:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Block non-English commit text and sensitive file content
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+          AFTER_SHA: ${{ github.sha }}
+        run: |
+          python3 <<'PY'
+          import os
+          import re
+          import subprocess
+          import sys
+          from pathlib import Path
+
+          def run_git(*args):
+              return subprocess.check_output(["git", *args], text=True)
+
+          def fail(message):
+              print(f"ERROR: {message}", file=sys.stderr)
+              sys.exit(1)
+
+          before = os.environ.get("BEFORE_SHA", "")
+          after = os.environ.get("AFTER_SHA", "HEAD")
+          zero_sha = "0" * 40
+          if before and before != zero_sha:
+              commit_range = f"{before}..{after}"
+          else:
+              commit_range = after
+
+          messages = run_git("log", "--format=%B", commit_range)
+          bad_message_chars = sorted({ch for ch in messages if ord(ch) > 127})
+          if bad_message_chars:
+              sample = "".join(bad_message_chars[:8])
+              fail(f"public commit messages must be English ASCII only; found non-ASCII characters: {sample!r}")
+
+          cjk_ranges = (
+              (0x3400, 0x4DBF),
+              (0x4E00, 0x9FFF),
+              (0x3040, 0x30FF),
+              (0xAC00, 0xD7AF),
+          )
+
+          def has_cjk(text):
+              for ch in text:
+                  code = ord(ch)
+                  if any(start <= code <= end for start, end in cjk_ranges):
+                      return True
+              return False
+
+          sensitive_patterns = (
+              (re.compile(rb"([0-9]{1,3}\.){3}[0-9]{1,3}"), "IPv4 address"),
+              (re.compile(rb"BEGIN ([A-Z0-9 ]*)?PRIVATE KEY"), "private key"),
+              (re.compile(rb"ssh-(rsa|ed25519)"), "SSH public key"),
+              (re.compile(rb"AKIA[0-9A-Z]{16}"), "AWS access key"),
+              (re.compile(rb"ghp_[A-Za-z0-9_]{20,}"), "GitHub token"),
+              (re.compile(rb"github_pat_[A-Za-z0-9_]+"), "GitHub fine-grained token"),
+              (re.compile(("/var/" + "www").encode()), "server web root path"),
+              (re.compile(("root" + "@").encode()), "root SSH target"),
+              (re.compile(("decisionkit" + "@").encode()), "server SSH target"),
+              (re.compile(("144" + r"\.172" + r"\.96" + r"\.14").encode()), "production server IP"),
+          )
+
+          files = run_git("ls-files").splitlines()
+          violations = []
+          for file_name in files:
+              path = Path(file_name)
+              if not path.is_file():
+                  continue
+              data = path.read_bytes()
+              try:
+                  text = data.decode("utf-8")
+              except UnicodeDecodeError:
+                  text = data.decode("utf-8", errors="ignore")
+              if has_cjk(text):
+                  violations.append(f"{file_name}: contains CJK text")
+              for pattern, label in sensitive_patterns:
+                  if pattern.search(data):
+                      violations.append(f"{file_name}: contains possible {label}")
+
+          if violations:
+              for item in violations[:50]:
+                  print(item, file=sys.stderr)
+              if len(violations) > 50:
+                  print(f"... and {len(violations) - 50} more", file=sys.stderr)
+              fail("public repository content guard failed")
+
+          print("Public content guard passed.")
+          PY
