@@ -1,13 +1,13 @@
-# Million Dollar Timeline Calculator
+# Million Dollar Calculator
 
-Free $1M timeline calculator project from DecisionKit. Estimate how long it could take to save one million dollars, compare broad savings and investing assumptions, and open the official live calculator.
+Free million dollar calculator project from DecisionKit. Estimate how long it could take to save one million dollars, compare broad savings and investing assumptions, and open the official live calculator.
 
 [Use the million dollar calculator](https://decisionkit.site/tools/million-dollar-timeline-calculator/)  
 [Browse all DecisionKit calculators](https://decisionkit.site/tools/)
 
 ## Live million dollar calculator
 
-- [Million Dollar Timeline Calculator](https://decisionkit.site/tools/million-dollar-timeline-calculator/) - estimate how long it could take to save $1M from broad savings, investing, asset, income, and debt ranges.
+- [Million Dollar Calculator](https://decisionkit.site/tools/million-dollar-timeline-calculator/) - estimate how long it could take to save $1M from broad savings, investing, asset, income, and debt ranges.
 - [DecisionKit calculators](https://decisionkit.site/tools/) - browse the live tool directory.
 - [Move-in cost calculator](https://decisionkit.site/housing/move-in-cash-calculator/) - estimate lease-day cash needs.
 - [Apartment utility cost calculator](https://decisionkit.site/housing/utilities-and-setup-cost-estimator/) - estimate utility setup and monthly costs.
@@ -30,7 +30,7 @@ DecisionKit calculators are educational planning tools, not financial, legal, ta
 
 - Official site: <https://decisionkit.site/>
 - Live $1M tool: <https://decisionkit.site/tools/million-dollar-timeline-calculator/>
-- GitHub guide page: <https://18fc.github.io/million-dollar-timeline-calculator/>
+- GitHub guide page: <https://18fc.github.io/million-dollar-calculator/>
 
 ## Project status
 
