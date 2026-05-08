@@ -1,6 +1,6 @@
 # Million Dollar Calculator
 
-Free million dollar calculator project from DecisionKit. Estimate how long it could take to save one million dollars, compare broad savings and investing assumptions, and open the official live calculator.
+Free million dollar calculator from DecisionKit. Estimate how long it could take to save one million dollars, compare broad savings and investing assumptions, and open the official live calculator.
 
 [Use the million dollar calculator](https://decisionkit.site/tools/million-dollar-timeline-calculator/)  
 [Browse all DecisionKit calculators](https://decisionkit.site/tools/)
@@ -24,14 +24,14 @@ The DecisionKit million dollar calculator is for people who want a broad estimat
 
 ## Trust and privacy notes
 
-DecisionKit calculators are educational planning tools, not financial, legal, tax, or investment advice. The official tools run at `decisionkit.site`; this repository is a GitHub project entry and reference page.
+DecisionKit calculators are educational planning tools, not financial, legal, tax, or investment advice. Use the official DecisionKit calculator when entering your own planning assumptions.
 
-## Canonical live pages
+## Official pages
 
 - Official site: <https://decisionkit.site/>
 - Live $1M tool: <https://decisionkit.site/tools/million-dollar-timeline-calculator/>
 - GitHub guide page: <https://18fc.github.io/million-dollar-calculator/>
 
-## Project status
+## Start planning
 
-The live DecisionKit site is a static HTML, CSS, and JavaScript project. This GitHub entry exists to make the public calculator work easier to discover, reference, and share.
+Open the live calculator, choose the ranges that are closest to your current situation, and compare how different savings or investing assumptions can change the path to $1,000,000.
